@@ -5,8 +5,8 @@ const bodyParser = require('body-parser');
 // LINE Messaging API用の設定
 const line = require('@line/bot-sdk');
 const config = {
-  channelAccessToken: 'あなたのチャネルアクセストークン',
-  channelSecret: 'あなたのチャネルシークレット'
+  channelAccessToken: '2006460991',
+  channelSecret: 'c4584a9ab0cc4ddac438e2f2fdb1136e'
 };
 const client = new line.Client(config);
 
