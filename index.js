@@ -13,23 +13,32 @@ const client = new line.Client(config);
 // リクエストの解析
 app.use(bodyParser.json());
 
-// QRコードに対応するエンドポイント
-app.get('/qr1', (req, res) => {
-  const userId = 'ユーザーのLINE ID';  // ここにユーザーIDを取得するロジックが必要
-  client.pushMessage(userId, {
-    type: 'text',
-    text: 'スポット1をクリアしました！'
-  });
-  res.send('QR1 スキャン完了');
-});
+// Webhookエンドポイント
+app.post('/callback', (req, res) => {
+  const events = req.body.events;  // LINEから送られたイベント情報
 
-app.get('/qr2', (req, res) => {
-  const userId = 'ユーザーのLINE ID';
-  client.pushMessage(userId, {
-    type: 'text',
-    text: 'スポット2をクリアしました！'
+  // イベントごとに処理を行う
+  events.forEach((event) => {
+    const userId = event.source.userId;  // ユーザーIDを取得
+
+    // もしQRコード1に対応するメッセージなら
+    if (event.message.text === 'qr1') {
+      client.pushMessage(userId, {
+        type: 'text',
+        text: 'スポット1をクリアしました！'
+      });
+    }
+
+    // もしQRコード2に対応するメッセージなら
+    else if (event.message.text === 'qr2') {
+      client.pushMessage(userId, {
+        type: 'text',
+        text: 'スポット2をクリアしました！'
+      });
+    }
   });
-  res.send('QR2 スキャン完了');
+
+  res.status(200).end();  // 成功レスポンス
 });
 
 // サーバーを起動
